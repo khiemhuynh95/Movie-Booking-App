@@ -1,4 +1,4 @@
-const apikey: string = '753049c9feaee5416b7f1b3fe918f733';
+const apikey: string = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3MWFmMmNlMDQxMTU5NDIyMTcxZTNkZGIwZTAwNDNhNiIsInN1YiI6IjYzZDZkNGM3MTdjNDQzMDA3ZTc2MDc1MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.jHLI851nbSUeCCD9_y5-hq4Wkuol8fVX3OGmvA6vtNc';
 export const baseImagePath = (size: string, path: string) => {
   return `https://image.tmdb.org/t/p/${size}${path}`;
 };
