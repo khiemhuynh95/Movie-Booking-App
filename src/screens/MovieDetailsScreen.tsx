@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   View,
@@ -11,7 +11,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import {baseImagePath, movieCastDetails, movieDetails} from '../api/apicalls';
+import { baseImagePath, movieCastDetails, movieDetails } from '../api/apicalls';
 import {
   BORDERRADIUS,
   COLORS,
@@ -24,6 +24,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import CustomIcon from '../components/CustomIcon';
 import CategoryHeader from '../components/CategoryHeader';
 import CastCard from '../components/CastCard';
+import YoutubePlayer from "react-native-youtube-iframe";
 
 const getMovieDetails = async (movieid: number) => {
   try {
@@ -48,7 +49,7 @@ const getMovieCastDetails = async (movieid: number) => {
   }
 };
 
-const MovieDetailsScreen = ({navigation, route}: any) => {
+const MovieDetailsScreen = ({ navigation, route }: any) => {
   const [movieData, setMovieData] = useState<any>(undefined);
   const [movieCastData, setmovieCastData] = useState<any>(undefined);
 
@@ -99,7 +100,7 @@ const MovieDetailsScreen = ({navigation, route}: any) => {
       <View>
         <ImageBackground
           source={{
-            uri: baseImagePath('w780', movieData?.backdrop_path),
+            uri: baseImagePath('w780', movieData?.backdropPath),
           }}
           style={styles.imageBG}>
           <LinearGradient
@@ -116,7 +117,7 @@ const MovieDetailsScreen = ({navigation, route}: any) => {
         </ImageBackground>
         <View style={styles.imageBG}></View>
         <Image
-          source={{uri: baseImagePath('w342', movieData?.poster_path)}}
+          source={{ uri: baseImagePath('w342', movieData?.posterPath) }}
           style={styles.cardImage}
         />
       </View>
@@ -130,34 +131,42 @@ const MovieDetailsScreen = ({navigation, route}: any) => {
       </View>
 
       <View>
-        <Text style={styles.title}>{movieData?.original_title}</Text>
+        <Text style={styles.title}>{movieData?.title}</Text>
         <View style={styles.genreContainer}>
           {movieData?.genres.map((item: any) => {
             return (
-              <View style={styles.genreBox} key={item.id}>
-                <Text style={styles.genreText}>{item.name}</Text>
+              <View style={styles.genreBox} key={item.genre}>
+                <Text style={styles.genreText}>{item.genre}</Text>
               </View>
             );
           })}
         </View>
-        <Text style={styles.tagline}>{movieData?.tagline}</Text>
+        <Text style={styles.tagline}>{movieData?.tagLine}</Text>
       </View>
 
       <View style={styles.infoContainer}>
         <View style={styles.rateContainer}>
           <CustomIcon name="star" style={styles.starIcon} />
           <Text style={styles.runtimeText}>
-            {movieData?.vote_average.toFixed(1)} ({movieData?.vote_count})
+            {movieData?.rating.toFixed(1)} ({movieData?.voteCount})
           </Text>
           <Text style={styles.runtimeText}>
-            {movieData?.release_date.substring(8, 10)}{' '}
-            {new Date(movieData?.release_date).toLocaleString('default', {
+            {movieData?.releaseDate.substring(8, 10)}{' '}
+            {new Date(movieData?.releaseDate).toLocaleString('default', {
               month: 'long',
             })}{' '}
-            {movieData?.release_date.substring(0, 4)}
+            {movieData?.releaseDate.substring(0, 4)}
           </Text>
         </View>
-        <Text style={styles.descriptionText}>{movieData?.overview}</Text>
+        <Text style={styles.descriptionText}>{movieData?.description}</Text>
+      </View>
+
+      <View>
+        <CategoryHeader title="Trailer" />
+        <YoutubePlayer
+          height={200}
+          videoId={movieData?.trailerYtId}
+        />
       </View>
 
       <View>
@@ -167,7 +176,7 @@ const MovieDetailsScreen = ({navigation, route}: any) => {
           keyExtractor={(item: any) => item.id}
           horizontal
           contentContainerStyle={styles.containerGap24}
-          renderItem={({item, index}) => (
+          renderItem={({ item, index }) => (
             <CastCard
               shouldMarginatedAtEnd={true}
               cardWidth={80}
@@ -185,11 +194,11 @@ const MovieDetailsScreen = ({navigation, route}: any) => {
             style={styles.buttonBG}
             onPress={() => {
               navigation.push('SeatBooking', {
-                BgImage: baseImagePath('w780', movieData.backdrop_path),
-                PosterImage: baseImagePath('original', movieData.poster_path),
+                BgImage: baseImagePath('w780', movieData.backdropPath),
+                PosterImage: baseImagePath('original', movieData.posterPath),
               });
             }}>
-            <Text style={styles.buttonText}>Select Seats</Text>
+            <Text style={styles.buttonText}>Book Tickets</Text>
           </TouchableOpacity>
         </View>
       </View>
